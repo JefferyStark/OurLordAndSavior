@@ -5,13 +5,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <OLASConfig.h>
 
-int main()
+int main(int argc, char* argv[])
 {
     std::cout << "hi, zus! \n";
     std::cout << "2 + 3 = " << mearlymath::add(2, 3) << std::endl;
-    
-   int xpos, ypos, height;
+    std::cout << argv[0] << " VERSION " << OLAS_VERSION_MAJOR << "." << OLAS_VERSION_MINOR << std::endl;
+
+    int xpos, ypos, height;
     const char* description;
     GLFWwindow* windows;
     if (!glfwInit())

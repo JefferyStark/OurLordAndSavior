@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.16.3)
 
-project(OLAS)
+project(OLAS VERSION 1.3)
+
+configure_file( OLASConfig.h.in OLASConfig.h )
 
 add_executable(${PROJECT_NAME} main.cpp)
+
+target_include_directories( ${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR} )
 
 add_subdirectory(Adder)
 
@@ -36,8 +40,8 @@ target_include_directories( ${PROJECT_NAME}
 )
 
 target_link_directories(${PROJECT_NAME}
-    PRIVATE Adder
-    PRIVATE external/glfw/src
+    PRIVATE out/build/Adder
+    PRIVATE out/build/external/glfw/src
  )
 
 target_link_libraries(${PROJECT_NAME} adder glfw)
