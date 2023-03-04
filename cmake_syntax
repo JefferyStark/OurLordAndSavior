@@ -30,7 +30,6 @@ my_macro("hello")
 
 
 ---------------------------------function-----------------------------------------------------
-
 function(my_func ARG1 ARG2)
   math(EXPR SUM "${ARG1} + ${ARG2}")
   return(${SUM})
@@ -38,6 +37,38 @@ endfunction()
 
 set(RESULT "${my_func(1, 2)}")
 message("Result is ${RESULT}")
+
+||||||||||||||||function and macro|||||||||||||||||||
+set(var "ABC")
+macro(Moo arg)
+  message("arg = ${arg}")
+  set(arg "abc")
+  message("# After change the value of arg.")
+  message("arg = ${arg}")
+endmacro()
+message("=== Call macro ===")
+Moo(${var})
+
+function(Foo arg)
+  message("arg = ${arg}")
+  set(arg "abc")
+  message("# After change the value of arg.")
+  message("arg = ${arg}")
+endfunction()
+message("=== Call function ===")
+Foo(${var})
+and the output is:
+=== Call macro ===
+arg = ABC
+# After change the value of arg.
+arg = ABC
+=== Call function ===
+arg = ABC
+# After change the value of arg.
+arg = abc
+So it seems arg is assigned the value of var when calling Foo and ${arg} is just string replaced with ${var} when calling Moo.
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 
 ---------------------------#cmakedefine  and #define-------------------------
 configure_file(config.h.in config.h)  
