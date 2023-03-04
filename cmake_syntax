@@ -1,0 +1,75 @@
+CMake syntax
+
+------------------Variable-----------------------------
+Strings using set():
+    set(MyString "Some Text")
+    set(MyStringWithVar "Some other Text: ${MyString}")
+    set(MyStringWithQuot "Some quote: \"${MyStringWithVar}\"")
+
+Or with string():
+    string(APPEND MyStringWithContent " ${MyString}")
+
+Lists using set():
+    set(MyList "a" "b" "c")
+    set(MyList ${MyList} "d")
+
+Or better with list():
+    list(APPEND MyList "a" "b" "c")
+    list(APPEND MyList "d")
+
+Lists of File Names:
+    set(MySourcesList "File.name" "File with Space.name")
+    list(APPEND MySourcesList "File.name" "File with Space.name")
+    add_excutable(MyExeTarget ${MySourcesList})
+---------------------macro----------------------------------
+macro(my_macro ARG)
+  message("Argument is ${ARG}")
+endmacro()
+
+my_macro("hello")
+
+
+---------------------------------function-----------------------------------------------------
+
+function(my_func ARG1 ARG2)
+  math(EXPR SUM "${ARG1} + ${ARG2}")
+  return(${SUM})
+endfunction()
+
+set(RESULT "${my_func(1, 2)}")
+message("Result is ${RESULT}")
+
+---------------------------#cmakedefine  and #define-------------------------
+configure_file(config.h.in config.h)  
+        #cmakedefine MACRO_NAME
+ MACRO_NAME is the name of the macro.
+ a preprocessor macro named MY_MACRO is defined using #cmakedefine in the config.h.in file. During the CMake configuration step, the configure_file() command generates a C header file named config.h that contains the definition of the macro.
+
+On the other hand, #define is a standard C syntax that is used to define a preprocessor macro in the source code of a project.
+# Use the MY_MACRO macro in a C source file
+#include <stdio.h>
+#define MY_MACRO "Hello, world!"
+int main() {
+    printf("%s\n", MY_MACRO);
+    return 0;
+}
+
+Overall, #cmakedefine and #define are both useful for defining preprocessor macros in a CMake project, but they are used in different contexts and with different syntax. #cmakedefine is typically used during the CMake configuration step to generate a header file with predefined macros, while #define is used directly in the source code of the project to define macros that are specific to that file.
+
+
+--------------------option()--------------------------------------------------------------------------
+the option() command is used to define an option that can be toggled by the user during the CMake configuration step. The syntax of the option() command is as follows:
+option(<option_name> "help string" <initial_value>)
+
+example: 
+# Define an option that determines whether to enable a feature
+option(ENABLE_FEATURE "Enable feature" ON)
+
+# Use the ENABLE_FEATURE option in the source code
+if (ENABLE_FEATURE)
+    add_definitions(-DENABLE_FEATURE)
+endif()
+
+During the CMake configuration step, the user can toggle the value of the ENABLE_FEATURE option using the -D command-line option. For example, to disable the feature, the user would run the following command:
+cmake -DENABLE_FEATURE=OFF ..
+
